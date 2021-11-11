@@ -20,11 +20,12 @@ contract CrowdFunding {
         author = payable(msg.sender);
     }
 
-    function fundProject() {
-
+    function fundProject() public payable {
+        author.transfer(msg.value);
+        funds += msg.value;
     }
 
-    function changeProjectState() {
-        
+    function changeProjectState(string calldata newState) public {
+        state = newState;
     }
 }
