@@ -7,10 +7,25 @@ contract CrowdFunding {
     string public name;
     string public description;
     
-    address payable public author;
+    address payable public author; // variable address payable maneja la cartera que vamos a recibir fondos
     string public state = 'Opened';
     uint public funds;
     uint public fundraisingGoal;
+
+    // Eventos
+    // Permite conectar lo que psa dentro de la Blockchain con el exterior porque
+    // a traves de un protocolo otras aplicaciones se pueden suscribir a
+    // ellos y escuchar todo lo que está pasando en el Smart Contract
+
+    event ProjectFunded(
+        string projectId,
+        uint value
+    );
+
+    event ProjectStateChanged(
+        string id,
+        string state
+    );
 
     constructor(string memory _id, string memory _name, string memory _description, uint _fundraisingGoal) {
         id = _id;
@@ -20,12 +35,24 @@ contract CrowdFunding {
         author = payable(msg.sender);
     }
 
-    function fundProject() public payable {
-        author.transfer(msg.value);
-        funds += msg.value;
+    modifier isAuthor() {
+        require(author == msg.sender, "Necesitas ser el autor del proyecto");
+        _;
     }
 
-    function changeProjectState(string calldata newState) public {
+    modifier isNotAuthor() {
+        require(author != msg.sender, "Como autor no puedes financiar tu propio proyecto");
+        _;
+    }
+
+    function fundProject() public payable isNotAuthor {
+        author.transfer(msg.value);
+        funds += msg.value;
+        emit ProjectFunded(id, msg.value);
+    }
+
+    function changeProjectState(string calldata newState) public isAuthor {
         state = newState;
+        emit ProjectStateChanged(id, newState);
     }
 }
