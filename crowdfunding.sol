@@ -4,6 +4,9 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract CrowdFunding {
 
+    // Enum type para guardar los posibles valores del estado de nuestro proyecto
+    enum FundState { Opened, Closed }
+
     // Se define la estructura
     struct Project {
         string id;
@@ -11,7 +14,7 @@ contract CrowdFunding {
         string description;
 
         address payable author; // variable address payable maneja la cartera que vamos a recibir fondos
-        uint state; // estado del proyeto open o close
+        FundState state; // estado del proyeto open o close
         uint funds;
         uint fundraisingGoal;
     }
@@ -31,11 +34,11 @@ contract CrowdFunding {
 
     event ProjectStateChanged(
         string id,
-        uint state
+        FundState state
     );
 
     constructor(string memory _id, string memory _name, string memory _description, uint _fundraisingGoal) {
-        project = Project(_id, _name, _description, payable(msg.sender), 0, 0, _fundraisingGoal);
+        project = Project(_id, _name, _description, payable(msg.sender), FundState.Opened, 0, _fundraisingGoal);
     }
 
     modifier isAuthor() {
@@ -49,14 +52,14 @@ contract CrowdFunding {
     }
 
     function fundProject() public payable isNotAuthor {
-        require(project.state != 1, "El proyecto no puede recibir fondos"); // valida si el estado es diferente sino envia mensaje error
+        require(project.state != FundState.Closed, "El proyecto no puede recibir fondos"); // valida si el estado es diferente sino envia mensaje error
         require(msg.value > 0, "El valor del fondo debe ser mayor que 0"); // valida si el valor de eth que envia el user es mayor a 0 sino mensaje error
         project.author.transfer(msg.value);
         project.funds += msg.value;
         emit ProjectFunded(project.id, msg.value);
     }
 
-    function changeProjectState(uint newState) public isAuthor {
+    function changeProjectState(FundState newState) public isAuthor {
         require(project.state != newState, "El nuevo estado debe ser diferente"); // valida si el estado actual es diferente al nuevo estado
         project.state = newState;
         emit ProjectStateChanged(project.id, newState);
