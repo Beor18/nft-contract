@@ -1,15 +1,18 @@
-const hre = require("hardhat");
+const { ethers } = require('hardhat')
 
-async function main() {
-  const Crowdfunding = await hre.ethers.getContractFactory("CrowdFunding");
-  const crowd = await Crowdfunding.deploy("Hello, Hardhat!");
+const deploy = async () => {
+  const [deployer] = await ethers.getSigners()
 
-  await crowd.deployed();
+  console.log('Deploying contract with the account: ', deployer.address)
+  const AmazonaVerse = await ethers.getContractFactory('AmazonaVerse')
+  const deployed = await AmazonaVerse.deploy()
 
-  console.log("Greeter deployed to:", crowd.address);
+  console.log('Amazona Verse is deployed at: ', deployed.address)
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+deploy()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.log(error)
+    process.exit(1)
+  })
