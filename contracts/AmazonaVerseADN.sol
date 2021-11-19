@@ -200,7 +200,17 @@ contract AmazonaVerseADN {
         "ShortHairTheCaesarSidePart"
     ];
 
-    // TODO: Calculate DNA
+    // Calcular ADN
+    // Esta function pseudo random es deterministica y no debe ser usado en produccion
+    // Utilizar ChainLink para consumir datos aleatorios
+    
+    function deterministicPseudoRandom (uint256 _tokenId, address _minter)  public pure returns (uint256) {
+        uint256 combinedParams = _tokenId + uint160(_minter);
+        bytes memory encodedParams = abi.encodePacked(combinedParams);
+        bytes32 hashParams = keccak256(encodedParams);
+
+        return uint256(hashParams);
+    }
 
     // Get attributes
     uint8 constant ADN_SECTION_SIZE = 2;
