@@ -37,34 +37,36 @@ contract AmazonaVerse is ERC721, ERC721Enumerable, AmazonaVerseADN {
 
     function _paramsURI(uint256 _adn) internal view returns(string memory) {
         string memory params;
-        params = string(
-            abi.encodePacked(
-                "accessoriesType=",
-                getAccessoriesType(_adn),
-                "&clotheColor=",
-                getClotheColor(_adn),
-                "&clotheType=",
-                getClotheType(_adn),
-                "&eyeType=",
-                getEyeType(_adn),
-                "&eyebrowType=",
-                getEyeBrowType(_adn),
-                "&facialHairColor=",
-                getFacialHairColor(_adn),
-                "&facialHairType=",
-                getFacialHairType(_adn),
-                "&hairColor=",
-                getHairColor(_adn),
-                "&hatColor=",
-                getHatColor(_adn),
-                "&graphicType=",
-                getGraphicType(_adn),
-                "&mouthType=",
-                getMouthType(_adn),
-                "&skinColor=",
-                getSkinColor(_adn)
-            )
-        );
+        {
+            params = string(
+                abi.encodePacked(
+                    "accessoriesType=",
+                    getAccessoriesType(_adn),
+                    "&clotheColor=",
+                    getClotheColor(_adn),
+                    "&clotheType=",
+                    getClotheType(_adn),
+                    "&eyeType=",
+                    getEyeType(_adn),
+                    "&eyebrowType=",
+                    getEyeBrowType(_adn),
+                    "&facialHairColor=",
+                    getFacialHairColor(_adn),
+                    "&facialHairType=",
+                    getFacialHairType(_adn),
+                    "&hairColor=",
+                    getHairColor(_adn),
+                    "&hatColor=",
+                    getHatColor(_adn),
+                    "&graphicType=",
+                    getGraphicType(_adn),
+                    "&mouthType=",
+                    getMouthType(_adn),
+                    "&skinColor=",
+                    getSkinColor(_adn)
+                )
+            );
+        }
         return string(abi.encodePacked(params, "&topType=", getTopType(_adn)));
     }
 
