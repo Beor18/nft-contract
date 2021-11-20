@@ -5,11 +5,13 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "./Base64.sol";
 import "./AmazonaVerseADN.sol";
 
 contract AmazonaVerse is ERC721, ERC721Enumerable, AmazonaVerseADN {
     using Counters for Counters.Counter;
+    using Strings for uint256;
 
     Counters.Counter private _idCounter;
     uint256 public maxSupply;
@@ -81,7 +83,7 @@ contract AmazonaVerse is ERC721, ERC721Enumerable, AmazonaVerseADN {
         string memory image = imageByAdn(adn);
 
         string memory jsonURI = Base64.encode(abi.encodePacked(
-            '{ "Name": "AmazonaVerse #', tokenId,'","description": "Amazona Verse NFT", "image":"', image, '"}'
+            '{ "name": "AmazonaVerse #', tokenId.toString(),'","description": "Amazona Verse NFT", "image":"', image, '"}'
         ));
 
         return string(abi.encodePacked("data:application/json;base64", jsonURI));
