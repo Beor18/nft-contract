@@ -4,7 +4,7 @@ flatten
 coverage
 coverage.json
 typechain
-
+Flattened.sol
 #Hardhat files
 cache
 artifacts

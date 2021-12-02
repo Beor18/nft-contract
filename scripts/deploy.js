@@ -5,7 +5,7 @@ const deploy = async () => {
 
   console.log('Deploying contract with the account: ', deployer.address)
   const AmazonaVerse = await ethers.getContractFactory('AmazonaVerse')
-  const deployed = await AmazonaVerse.deploy(10000)
+  const deployed = await AmazonaVerse.deploy(50)
 
   console.log('Amazona Verse is deployed at: ', deployed.address)
 }

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -17,7 +17,7 @@ contract AmazonaVerse is ERC721, ERC721Enumerable, AmazonaVerseADN {
     uint256 public maxSupply;
     mapping(uint256 => uint256) public tokenADN;
 
-    constructor(uint256 _maxSupply) ERC721("AmazonaVerse", "AMZN") {
+    constructor(uint256 _maxSupply) ERC721("ShibaGnomes", "SHME") {
         maxSupply = _maxSupply;
     }
 
@@ -32,63 +32,63 @@ contract AmazonaVerse is ERC721, ERC721Enumerable, AmazonaVerseADN {
 
     // base url api de imagenes random
     function _baseURI() internal pure override returns(string memory) {
-        return "https://avataaars.io/";
+        return "https://nft.ryoshiburn.com/";
     }
 
-    function _paramsURI(uint256 _adn) internal view returns(string memory) {
-        string memory params;
-        {
-            params = string(
-                abi.encodePacked(
-                    "accessoriesType=",
-                    getAccessoriesType(_adn),
-                    "&clotheColor=",
-                    getClotheColor(_adn),
-                    "&clotheType=",
-                    getClotheType(_adn),
-                    "&eyeType=",
-                    getEyeType(_adn),
-                    "&eyebrowType=",
-                    getEyeBrowType(_adn),
-                    "&facialHairColor=",
-                    getFacialHairColor(_adn),
-                    "&facialHairType=",
-                    getFacialHairType(_adn),
-                    "&hairColor=",
-                    getHairColor(_adn),
-                    "&hatColor=",
-                    getHatColor(_adn),
-                    "&graphicType=",
-                    getGraphicType(_adn),
-                    "&mouthType=",
-                    getMouthType(_adn),
-                    "&skinColor=",
-                    getSkinColor(_adn)
-                )
-            );
-        }
-        return string(abi.encodePacked(params, "&topType=", getTopType(_adn)));
-    }
+    // function _paramsURI(uint256 _adn) internal view returns(string memory) {
+    //     string memory params;
+    //     {
+    //         params = string(
+    //             abi.encodePacked(
+    //                 "accessoriesType=",
+    //                 getAccessoriesType(_adn),
+    //                 "&clotheColor=",
+    //                 getClotheColor(_adn),
+    //                 "&clotheType=",
+    //                 getClotheType(_adn),
+    //                 "&eyeType=",
+    //                 getEyeType(_adn),
+    //                 "&eyebrowType=",
+    //                 getEyeBrowType(_adn),
+    //                 "&facialHairColor=",
+    //                 getFacialHairColor(_adn),
+    //                 "&facialHairType=",
+    //                 getFacialHairType(_adn),
+    //                 "&hairColor=",
+    //                 getHairColor(_adn),
+    //                 "&hatColor=",
+    //                 getHatColor(_adn),
+    //                 "&graphicType=",
+    //                 getGraphicType(_adn),
+    //                 "&mouthType=",
+    //                 getMouthType(_adn),
+    //                 "&skinColor=",
+    //                 getSkinColor(_adn)
+    //             )
+    //         );
+    //     }
+    //     return string(abi.encodePacked(params, "&topType=", getTopType(_adn)));
+    // }
 
     // se concatena la base url + los parametros de url
-    function imageByAdn(uint256 _adn) public view returns(string memory) {
+    function imageByAdn() public pure returns(string memory) {
         string memory baseURI = _baseURI();
-        string memory paramsURI = _paramsURI(_adn);
+        //string memory paramsURI = _paramsURI(_adn);
 
-        return string(abi.encodePacked(baseURI, "?", paramsURI));
+        return string(abi.encodePacked(baseURI));
     }
 
     function tokenURI(uint256 tokenId) public view override returns(string memory){
         require(_exists(tokenId), "ERC721 Metadata: no existe el token");
         
         uint256 adn = tokenADN[tokenId];
-        string memory image = imageByAdn(adn);
+        string memory image = imageByAdn();
 
         string memory jsonURI = Base64.encode(abi.encodePacked(
-            '{ "name": "AmazonaVerse #', tokenId.toString(),'","description": "Amazona Verse NFT", "image":"', image, '"}'
+            '{ "name": "AmazonaVerse #', adn.toString(),'","description": "Amazona Verse NFT by CryptoChef and Beor", "image":"', image, '"}'
         ));
 
-        return string(abi.encodePacked("data:application/json;base64", jsonURI));
+        return string(abi.encodePacked("data:application/json;base64,", jsonURI));
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)

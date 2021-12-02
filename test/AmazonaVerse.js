@@ -58,7 +58,7 @@ describe('Amazona Verse Contract', () => {
       const stringTokenURI = await tokenURI.toString()
 
       const [, base64JSON] = stringTokenURI.split(
-        'data:application/json;base64',
+        'data:application/json;base64,',
       )
 
       const stringifiedMetadata = await Buffer.from(
